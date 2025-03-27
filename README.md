@@ -52,15 +52,15 @@ $ docker-compose up -d
 
 3. Ask one of the following questions and wait some seconds to see the results:
 
-3.1. Return intersystems iris server information
-3.2. Save the global value Hello to the global name Greetings
-3.3. Get the global value Greetings
-3.4. Kill the global Greetings
-3.5. List the classes on IRIS Server
-3.6. Where is intersystems iris installed?
-3.7. Return namespace information from the USER
-3.8. List the CSP Applications
-3.9. List the server files on namespace USER
-3.10. List the jobs on namespace %SYS
+* Return intersystems iris server information
+* Save the global value Hello to the global name Greetings
+* Get the global value Greetings
+* Kill the global Greetings
+* List the classes on IRIS Server
+* Where is intersystems iris installed?
+* Return namespace information from the USER
+* List the CSP Applications
+* List the server files on namespace USER
+* List the jobs on namespace %SYS
 
 <img width="600" alt="UI 3" src="https://github.com/yurimarx/langchain-iris-tool/blob/3fc992075ebe0fcd30741014be7187f57321a4c0/images/ui-3.png">
