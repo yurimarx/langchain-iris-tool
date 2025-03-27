@@ -45,7 +45,7 @@ $ docker-compose up -d
 ## Testing
 
 1. Open the URL http://localhost:8501
-<img width="884" alt="Screenshot 2020-08-07 at 17 42 26" src="https://user-images.githubusercontent.com/2781759/89657252-71606d80-d8d5-11ea-957f-041dbceffdc8.png">
+<img width="884" alt="UI 1" src="https://github.com/yurimarx/langchain-iris-tool/blob/defa15664fe741933f98e4bddb572549097d2793/images/ui-1.png">
 
 
 you should see the output of fhir resources on this server
