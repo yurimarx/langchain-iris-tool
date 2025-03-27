@@ -45,10 +45,10 @@ $ docker-compose up -d
 ## Testing
 
 1. Open the URL http://localhost:8501
-<img width="600" alt="UI 1" src="https://github.com/yurimarx/langchain-iris-tool/blob/defa15664fe741933f98e4bddb572549097d2793/images/ui-1.png">
+<img width="600" alt="UI 1" src="https://github.com/yurimarx/langchain-iris-tool/blob/main/images/ui-1.png?raw=true">
 
 2. Check out the Settings button used to the Agent connect the InterSystems IRIS
-<img width="600" alt="UI 2" src="https://github.com/yurimarx/langchain-iris-tool/blob/3fc992075ebe0fcd30741014be7187f57321a4c0/images/ui-2.png">
+<img width="600" alt="UI 2" src="https://github.com/yurimarx/langchain-iris-tool/blob/main/images/ui-2.png?raw=true">
 
 3. Ask one of the following questions and wait some seconds to see the results:
 
@@ -63,4 +63,4 @@ $ docker-compose up -d
 * List the server files on namespace USER
 * List the jobs on namespace %SYS
 
-<img width="600" alt="UI 3" src="https://github.com/yurimarx/langchain-iris-tool/blob/3fc992075ebe0fcd30741014be7187f57321a4c0/images/ui-3.png">
+<img width="600" alt="UI 3" src="https://github.com/yurimarx/langchain-iris-tool/blob/main/images/ui-3.png?raw=true">
