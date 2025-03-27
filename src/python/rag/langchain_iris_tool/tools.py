@@ -24,7 +24,7 @@ class InterSystemsIRISInput(BaseModel):
             "(get object documentation), 'query' (sql query), install_path (get Intersystems IRIS installation path), "
             "class_list (get Intersystems IRIS class list), server_info (get InterSystems IRIS server information), "
             "list_csp (list web/csp applications), list_files (list server/intersystems iris files), "
-            "get_namespace (get information about a namespace), "
+            "get_namespace (get information about a namespace), list_jobs (list the jobs on server/intersystems iris namespace)"
             "'create', 'update', or 'delete'"
         ),
     )
@@ -37,6 +37,10 @@ class InterSystemsIRISInput(BaseModel):
     ),
     query: Optional[str] = Field(
         None, description="The SQL query string for 'query' operation"
+    ),
+    filename: Optional[str] = Field(
+        None,
+        description="The InterSystems IRIS file name (e.g., 'Contact', 'Account', 'Lead')",
     ),
     class_name: Optional[str] = Field(
         None,
@@ -63,6 +67,7 @@ class InterSystemsIRISTool(BaseTool):
             export IRIS_PASSWORD="your-password"
             export IRIS_NAMESPACE="your-namespace"
             export IRIS_PORT="iris-port"
+            export IRIS_WEBPORT="iris-webport"
             export IRIS_HOST="iris-host" 
 
     Examples:
@@ -91,10 +96,11 @@ class InterSystemsIRISTool(BaseTool):
                 "class_name": "Account"
             }
 
-        List server/intersystems iris files on namespace USER:
+        List server/intersystems iris files on namespace USER with file name Portal:
             {
                 "operation": "list_files",
-                "namespace": "USER"
+                "namespace": "USER",
+                "filename": "Portal"
             }
         
         Where is intersystems iris installed?:
@@ -113,6 +119,13 @@ class InterSystemsIRISTool(BaseTool):
                 "operation": "server_info"
             }
         
+        List the jobs on namespace USER:
+            {
+                "operation": "list_jobs"
+                "query": "USER"
+            }
+        
+            
         List the CSP/Web Applications on namespace USER:
             {
                 "operation": "list_csp"
@@ -143,6 +156,9 @@ class InterSystemsIRISTool(BaseTool):
     _username: str = PrivateAttr()
     _password: str = PrivateAttr()
     _namespace: str = PrivateAttr()
+    _host: str = PrivateAttr()
+    _port: int = PrivateAttr()
+    _webport: int = PrivateAttr()
 
     def __init__(
         self,
@@ -150,18 +166,20 @@ class InterSystemsIRISTool(BaseTool):
         password: str,
         hostname: str,
         port: int,
+        webport: int,
         namespace: str,
     ) -> None:
         """Initialize iris connection."""
         super().__init__()
-        args = {'hostname': hostname, 'port': port,
-                'namespace': namespace, 'username': username, 'password': password}
         
-        self._conn = iris.connect(**args)
+        self._conn = iris.connect(hostname + ":" + str(port) + "/" + namespace, username=username, password=password, sharedmemory=False)
         self._iris = iris.createIRIS(self._conn)
-        self._username = username
+        self._username = username 
         self._password = password
         self._namespace = namespace
+        self._host = hostname
+        self._port = port
+        self._webport = webport
     
     def _run(
         self,
@@ -169,6 +187,7 @@ class InterSystemsIRISTool(BaseTool):
         global_name: Optional[str] = None,
         global_value: Optional[Any] = None,
         query: Optional[str] = None,
+        filename: Optional[str] = None,
         class_name: Optional[str] = None,
         namespace: Optional[str] = "%SYS",
         record_data: Optional[Dict[str, Any]] = None,
@@ -178,6 +197,8 @@ class InterSystemsIRISTool(BaseTool):
         """Execute InterSystems IRIS operation."""
         try:
             
+            baseurl = "http://" + self._host + ":" + str(self._webport)
+
             if operation == "get_global":
                 if not global_name:
                     raise ValueError("Global name is required for 'get_global' operation")
@@ -206,16 +227,23 @@ class InterSystemsIRISTool(BaseTool):
             elif operation == "get_namespace":
                 if global_name:
                     namespace = global_name
-                return self.getStudioApiResponse('/api/atelier/v1/' + urllib.parse.quote(namespace), self._username, self._password)
+                return self.getStudioApiResponse(baseurl, '/api/atelier/v1/' + urllib.parse.quote(namespace), self._username, self._password)
+
+            elif operation == "list_jobs":
+                return self.getStudioApiResponse(baseurl, '/api/atelier/v1/' + urllib.parse.quote(namespace) +'/jobs', self._username, self._password)
 
             elif operation == "list_files":
-                return self.getStudioApiResponse('/api/atelier/v1/' + urllib.parse.quote(namespace) +'/docnames', self._username, self._password)
+                if filename:
+                    print("lista arquivos " + filename + " no namespace " + namespace)
+                    return self.getStudioApiResponse(baseurl, '/api/atelier/v1/' + urllib.parse.quote(namespace) +'/docnames/CLS?filter=' + filename, self._username, self._password)
+                else:
+                    return self.getStudioApiResponse(baseurl, '/api/atelier/v1/' + urllib.parse.quote(namespace) +'/docnames/CLS', self._username, self._password)
 
             elif operation == "server_info":
-                return self.getStudioApiResponse('/api/atelier/', self._username, self._password)
+                return self.getStudioApiResponse(baseurl, '/api/atelier/', self._username, self._password)
 
             elif operation == "list_csp":
-                return self.getStudioApiResponse('/api/atelier/v1/' + urllib.parse.quote(namespace) +'/cspapps', self._username, self._password)
+                return self.getStudioApiResponse(baseurl, '/api/atelier/v1/' + urllib.parse.quote(namespace) +'/cspapps', self._username, self._password)
                 
             elif operation == "describe":
                 if not class_name:
@@ -234,6 +262,7 @@ class InterSystemsIRISTool(BaseTool):
         global_name: Optional[str] = None,
         global_value: Optional[str] = None,
         query: Optional[str] = None,
+        filename: Optional[str] = None,
         class_name: Optional[str] = None,
         namespace: Optional[str] = "%SYS",
         record_data: Optional[Dict[str, Any]] = None,
@@ -244,7 +273,7 @@ class InterSystemsIRISTool(BaseTool):
         # Intersystems IRIS doesn't have native async support,
         # so we just call the sync version
         return self._run(
-            operation, global_name, global_value, query, class_name, record_data, record_id, run_manager
+            operation, global_name, global_value, query, filename, class_name, namespace, record_data, record_id, run_manager
         )
 
     def invoke(
@@ -300,10 +329,9 @@ class InterSystemsIRISTool(BaseTool):
         return await self._arun(**input_dict)
     
     @staticmethod
-    def getStudioApiResponse(path, username, password):
-        baseUrl = "http://localhost:55038"
+    def getStudioApiResponse(baseurl, path, username, password):
         credentials = (username, password)
-        response = requests.get(baseUrl + path, auth=credentials)
+        response = requests.get(baseurl + path, auth=credentials)
         status = response.status_code
         if status == 200:
             return yaml.dump(response.json()) 

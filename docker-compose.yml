@@ -1,0 +1,58 @@
+services:
+  iris:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    expose:
+      - 8501
+    ports: 
+      - 51972:1972
+      - 53795:52773
+      - 53773
+    networks:
+      - iris-llm2-network
+    volumes:
+      - ./:/irisdev/app
+      - ./init.sh:/docker-entrypoint-initdb.d/init.sh
+    
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - 11434:11434
+    volumes:
+      - ./model_files:/model_files 
+      - .:/code
+      - ./ollama:/root/.ollama
+    container_name: ollama_iris
+    pull_policy: always
+    tty: true
+    entrypoint: ["/bin/sh", "/model_files/run_ollama.sh"] # Loading the finetuned Mistral with the GGUF file
+    restart: always
+    environment:
+      - OLLAMA_KEEP_ALIVE=24h
+      - OLLAMA_HOST=0.0.0.0
+    networks:
+      - iris-llm2-network
+
+  
+  streamlit:
+    build:
+      context: ./
+      dockerfile: ./streamlit/Dockerfile
+    #stdin_open: true # docker run -i
+    #tty: true 
+    #entrypoint: /bin/sh
+    command: streamlit run /usr/src/app/main.py --server.port 8501
+    volumes:
+      - ./src/python/rag:/usr/src/app
+    expose: [8501]
+    ports:
+      - 8501:8501
+    image: yourstreamlitapp:latest 
+    networks:
+      - iris-llm2-network
+        
+networks:
+  iris-llm2-network:
+    driver: bridge

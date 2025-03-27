@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25">
+  <Document name="langchain-iris-tool.ZPM">
+    <Module>
+      <Name>langchain-iris-tool</Name>
+      <Description>Langchain IRIS Tool</Description>
+      <Version>0.0.1</Version>
+      <Packaging>module</Packaging>      
+      <SourcesRoot>src</SourcesRoot>
+      <Resource Name="dc.langchain.PKG"/>
+    </Module>
+  </Document>
+</Export>
