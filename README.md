@@ -4,16 +4,17 @@
 Contains an implementation of a Langchain Tool (BaseTool) to do RAG operations on Intersystems IRIS Server. 
 It is a Chat Agent tool also. It is possible ask questions like:
 
-1. Return intersystems iris server information
-2. Save the global value Hello to the global name Greetings
-3. Get the global value Greetings
-4. Kill the global Greetings
-5. List the classes on IRIS Server
-6. Where is intersystems iris installed?
-7. Return namespace information from the USER
-8. List the CSP Applications
-9. List the server files on namespace USER
-10. List the jobs on namespace %SYS
+1. List the server metrics
+2. Return intersystems iris server information
+3. Save the global value Hello to the global name Greetings
+4. Get the global value Greetings
+5. Kill the global Greetings
+6. List the classes on IRIS Server
+7. Where is intersystems iris installed?
+8. Return namespace information from the USER
+9. List the CSP Applications
+10. List the server files on namespace USER
+11. List the jobs on namespace %SYS
 
 ## Prerequisites
 Make sure you have [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) and [Docker desktop](https://www.docker.com/products/docker-desktop) installed.
@@ -52,6 +53,7 @@ $ docker-compose up -d
 
 3. Ask one of the following questions and wait some seconds to see the results:
 
+* List the server metrics
 * Return intersystems iris server information
 * Save the global value Hello to the global name Greetings
 * Get the global value Greetings

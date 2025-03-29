@@ -49,6 +49,4 @@ if st.button(label="Ask IRIS", type="primary"):
         with st.spinner(text="Generating response"):
             # Get response from llm
             response = llm.invoke(query)
-
-        # Display it
-        st.code(tool.invoke(response.tool_calls[0]["args"]), language="yaml")
+            st.code(tool.invoke(response.tool_calls[0]["args"]), language="yaml")

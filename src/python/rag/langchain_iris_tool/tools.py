@@ -24,6 +24,7 @@ class InterSystemsIRISInput(BaseModel):
             "(get object documentation), 'query' (sql query), install_path (get Intersystems IRIS installation path), "
             "class_list (get Intersystems IRIS class list), server_info (get InterSystems IRIS server information), "
             "list_csp (list web/csp applications), list_files (list server/intersystems iris files), "
+            "list_metrics(List server/intersystems iris monitoring/metrics), "
             "get_namespace (get information about a namespace), list_jobs (list the jobs on server/intersystems iris namespace)"
             "'create', 'update', or 'delete'"
         ),
@@ -96,6 +97,11 @@ class InterSystemsIRISTool(BaseTool):
                 "class_name": "Account"
             }
 
+        List server/intersystems iris monitoring/metrics:
+            {
+                "operation": "list_metrics"
+            }
+        
         List server/intersystems iris files on namespace USER with file name Portal:
             {
                 "operation": "list_files",
@@ -229,6 +235,9 @@ class InterSystemsIRISTool(BaseTool):
                     namespace = global_name
                 return self.getStudioApiResponse(baseurl, '/api/atelier/v1/' + urllib.parse.quote(namespace), self._username, self._password)
 
+            elif operation == "list_metrics":
+                return self.getStudioApiResponse(baseurl, '/api/monitor/metrics', self._username, self._password)
+
             elif operation == "list_jobs":
                 return self.getStudioApiResponse(baseurl, '/api/atelier/v1/' + urllib.parse.quote(namespace) +'/jobs', self._username, self._password)
 
@@ -334,6 +343,9 @@ class InterSystemsIRISTool(BaseTool):
         response = requests.get(baseurl + path, auth=credentials)
         status = response.status_code
         if status == 200:
-            return yaml.dump(response.json()) 
+            if "monitor/metrics" not in path: 
+                return yaml.dump(response.json()) 
+            else:
+                return response.text
         else:
             return None
