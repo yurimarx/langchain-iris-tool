@@ -1,6 +1,7 @@
 intersystems-irispython
 pydantic
 langchain-core
+langchain-experimental
 langchain_ollama
 streamlit
 streamlit-chat

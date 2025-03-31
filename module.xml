@@ -4,10 +4,14 @@
     <Module>
       <Name>langchain-iris-tool</Name>
       <Description>Langchain IRIS Tool</Description>
-      <Version>0.0.1</Version>
+      <Version>1.0.2</Version>
       <Packaging>module</Packaging>      
       <SourcesRoot>src</SourcesRoot>
       <Resource Name="dc.langchain.PKG"/>
+      <Resource Name="dc.gendata.PKG"/>
+      <Invokes>
+        <Invoke Class="dc.gendata.Company" Method="AddInitialData"></Invoke>
+      </Invokes>
     </Module>
   </Document>
 </Export>

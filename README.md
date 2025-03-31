@@ -16,6 +16,8 @@ It is a Chat Agent tool also. It is possible ask questions like:
 10. List the server files on namespace USER
 11. List the jobs on namespace %SYS
 
+Now, we have fake data generation using Generative AI.
+
 ## Prerequisites
 Make sure you have [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) and [Docker desktop](https://www.docker.com/products/docker-desktop) installed.
 
@@ -66,3 +68,14 @@ $ docker-compose up -d
 * List the jobs on namespace %SYS
 
 <img width="600" alt="UI 3" src="https://github.com/yurimarx/langchain-iris-tool/blob/main/images/ui-3.png?raw=true">
+
+## Testing the fake data generation
+
+1. Open the IRIS terminal on USER namespace and generate fake data from sample data on Company table:
+
+USER>do ##class(dc.gendata.FakeData).Generate("dc_gendata","Company","1=1","Company",10,"Basic company data",.results)
+
+2. Wait 10-30 minutes to generate and see the results on the output variable (results):
+
+USER>write results
+
