@@ -15,6 +15,7 @@ It is a Chat Agent tool also. It is possible ask questions like:
 9. List the CSP Applications
 10. List the server files on namespace USER
 11. List the jobs on namespace %SYS
+12. List alerts
 
 Now, we have fake data generation using Generative AI.
 
@@ -45,15 +46,29 @@ $ docker-compose up -d
 3. Streamlit - Frontend framework
 4. InterSystems IRIS as a server to answer the questions about it
 
-## Testing
-
+## 1. Testing IRIS Classes Chat
 1. Open the URL http://localhost:8501
 <img width="600" alt="UI 1" src="https://github.com/yurimarx/langchain-iris-tool/blob/main/images/ui-1.png?raw=true">
 
-2. Check out the Settings button used to the Agent connect the InterSystems IRIS
+2. Click item menu Iris Classes Chat
+
+3. Check out the Settings button used to the Agent connect the InterSystems IRIS
 <img width="600" alt="UI 2" src="https://github.com/yurimarx/langchain-iris-tool/blob/main/images/ui-2.png?raw=true">
 
-3. Ask one of the following questions and wait some seconds to see the results:
+4. Ask about your developed classes (e.g.: Are there classes that inherit from Persistent?)
+<img width="600" alt="UI 4" src="https://github.com/yurimarx/langchain-iris-tool/blob/main/images/ui-4.png?raw=true">
+
+
+## 2. Testing IRIS Tool Chat
+1. Open the URL http://localhost:8501
+<img width="600" alt="UI 1" src="https://github.com/yurimarx/langchain-iris-tool/blob/main/images/ui-1.png?raw=true">
+
+2. Click item menu Iris Tool Chat
+
+3. Check out the Settings button used to the Agent connect the InterSystems IRIS
+<img width="600" alt="UI 2" src="https://github.com/yurimarx/langchain-iris-tool/blob/main/images/ui-2.png?raw=true">
+
+4. Ask one of the following questions and wait some seconds to see the results:
 
 * List the server metrics
 * Return intersystems iris server information
@@ -66,10 +81,11 @@ $ docker-compose up -d
 * List the CSP Applications
 * List the server files on namespace USER
 * List the jobs on namespace %SYS
+* List alerts
 
 <img width="600" alt="UI 3" src="https://github.com/yurimarx/langchain-iris-tool/blob/main/images/ui-3.png?raw=true">
 
-## Testing the fake data generation
+## 3. Testing the fake data generation
 
 1. Open the IRIS terminal on USER namespace and generate fake data from sample data on Company table:
 

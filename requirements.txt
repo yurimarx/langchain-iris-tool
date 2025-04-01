@@ -3,5 +3,6 @@ pydantic
 langchain-core
 langchain-experimental
 langchain_ollama
+langchain-iris
 streamlit
 streamlit-chat

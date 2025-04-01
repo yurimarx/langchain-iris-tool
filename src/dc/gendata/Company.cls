@@ -1,4 +1,5 @@
-Class dc.gendata.Company Extends %Persistent
+/// Class to manage company data
+Class dc.gendata.Company Extends (%Persistent, %JSON.Adaptor)
 {
 
 /// Company name

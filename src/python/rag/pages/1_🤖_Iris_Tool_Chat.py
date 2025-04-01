@@ -2,6 +2,8 @@ from langchain_iris_tool.tools import InterSystemsIRISTool
 from langchain_ollama import ChatOllama
 import streamlit as st
 
+st.set_page_config(page_title="InterSystems IRIS Tool Demo", page_icon="🤖")
+
 #
 #   LANGCHAIN OLLAMA WRAPPER
 #
