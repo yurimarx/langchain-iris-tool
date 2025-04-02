@@ -50,7 +50,7 @@ services:
     #stdin_open: true # docker run -i
     #tty: true 
     #entrypoint: /bin/sh
-    command: streamlit run /usr/src/app/main.py --server.port 8501
+    command: streamlit run /usr/src/app/Menu.py --server.port 8501
     volumes:
       - ./src/python/rag:/usr/src/app
     expose: [8501]
