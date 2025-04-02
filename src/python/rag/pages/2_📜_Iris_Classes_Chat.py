@@ -6,7 +6,7 @@ import langchain_helper as lch
 username = "_system"
 password = "SYS"
 hostname = "iris"
-port = 51972
+port = 1972
 webport = 52773
 namespace = "USER"
 
