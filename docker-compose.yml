@@ -16,31 +16,49 @@ services:
       - ./:/irisdev/app
       - ./init.sh:/docker-entrypoint-initdb.d/init.sh
     
+    # when no gpu exists 
   ollama:
     image: ollama/ollama:latest
-    deploy:
-      resources:
-        reservations:
-          devices:
-          - driver: nvidia
-            capabilities: ["gpu"]
-            count: all  # Adjust count for the number of GPUs you want to use
     ports:
       - 11434:11434
     volumes:
       - ./model_files:/model_files 
       - .:/code
       - ./ollama:/root/.ollama
-    container_name: ollama_iris
+    container_name: ollama
     pull_policy: always
     tty: true
-    entrypoint: ["/bin/sh", "/model_files/run_ollama.sh"] # Loading the finetuned Mistral with the GGUF file
     restart: always
-    environment:
-      - OLLAMA_KEEP_ALIVE=24h
-      - OLLAMA_HOST=0.0.0.0
+    entrypoint: ["/usr/bin/bash", "/model_files/run_ollama.sh"]
     networks:
       - iris-llm2-network
+
+  # when gpu exists to get more performance
+  #ollama:
+  #  image: ollama/ollama:latest
+  #  deploy:
+  #    resources:
+  #      reservations:
+  #        devices:
+  #        - driver: nvidia
+  #          capabilities: ["gpu"]
+  #          count: all  # Adjust count for the number of GPUs you want to use
+  #  ports:
+  #    - 11434:11434
+  #  volumes:
+  #    - ./model_files:/model_files 
+  #    - .:/code
+  #    - ./ollama:/root/.ollama
+  #  container_name: ollama_iris
+  #  pull_policy: always
+  #  tty: true
+  #  entrypoint: ["/bin/sh", "/model_files/run_ollama.sh"] # Loading the finetuned Mistral with the GGUF file
+  #  restart: always
+  #  environment:
+  #    - OLLAMA_KEEP_ALIVE=24h
+  #    - OLLAMA_HOST=0.0.0.0
+  #  networks:
+  #    - iris-llm2-network
 
   
   streamlit:
